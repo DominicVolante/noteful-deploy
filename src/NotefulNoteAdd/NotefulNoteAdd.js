@@ -31,7 +31,7 @@ class AddNote extends Component {
 
         let name = n.get("noteName")
         let content = n.get("noteContent")
-        let date = new Date().toString()
+        let date = new Date().toUTCString()
         let folderId = n.get("folderId")
         console.log(this.getFolderList())
         if (typeof name !== "string" || name.length <= 0) return;
@@ -49,7 +49,7 @@ class AddNote extends Component {
           },
         })
         .then(res => {
-            this.props.addNote(data)
+        this.context.updateStore()
         this.props.history.push('/')
       })
       .catch(error => {
@@ -80,8 +80,8 @@ class AddNote extends Component {
     }
 }
  
-AddNote.propTypes = {
-  store: PropTypes.object.isRequired
-}
+// AddNote.propTypes = {
+//   store: PropTypes.object.isRequired
+// }
 
 export default AddNote;
