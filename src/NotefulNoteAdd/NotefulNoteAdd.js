@@ -1,33 +1,43 @@
 import React, { Component } from 'react';
 import ApiContext from '../ApiContext'
 import config from '../config';
+import PropTypes from 'prop-types';
 
 
-class NotefulNoteAdd extends Component {
+class AddNote extends Component {
     static contextType = ApiContext
     static defaultProps = {
         addNote: () => { },
       }
 
       getFolderList = () => {
-        console.log(this.context)
-        let arr = this.context.folders.map(folder => {
-          return 
-        })
-        return 
-      }
+        if ( typeof this.props !== "object" || this.props.history.location.pathname.includes("/note/") ) return;
+
+        return this.context.folders.map( (folder,i) => {
+            return (
+                <option
+                    key={i}
+                    value={folder.id}
+                >
+                    {folder.name}
+                </option>
+            );
+        });
+    }
 
       getNoteDetails = (form) => {
+
         const n = new FormData(form)
+
         let name = n.get("noteName")
         let content = n.get("noteContent")
         let date = new Date().toString()
-        let foldId = 
+        let folderId = n.get("folderId")
         console.log(this.getFolderList())
         if (typeof name !== "string" || name.length <= 0) return;
         // const folder = {name:name}
         // console.log(folder)
-        this.handleSubmit({name:name, content:content, modified:date})
+        this.handleSubmit({name:name, content:content, modified:date, folderId:folderId})
     
       }
       handleSubmit = (data) => {
@@ -49,6 +59,7 @@ class NotefulNoteAdd extends Component {
     render() { 
         const { className } = this.context
         return (
+                <div>
                 <form
                 className={['Noteful-form', className].join(' ')}
                 onSubmit={(e) => {
@@ -57,15 +68,20 @@ class NotefulNoteAdd extends Component {
 
                 }}
             >
-              <select name="folderName" id="folderName">
-
+              <select name="folderId" id="folderId">
+                {this.getFolderList()}
               </select>
                 <input type="text" id="noteName" name="noteName" aria-label="noteName" placeholder="New Note" required />
                 <textarea type="text" id="noteContent" name="noteContent" placeholder="Note Content Here" required />
                 <button type="submit">Submit</button>
             </form>
+            </div>
           );
     }
 }
  
-export default NotefulNoteAdd;
+AddNote.propTypes = {
+  store: PropTypes.object.isRequired
+}
+
+export default AddNote;
