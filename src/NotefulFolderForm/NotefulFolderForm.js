@@ -40,7 +40,9 @@ class NotefuFolderForm extends Component {
       .then(res => {
         //this.context.addFolder(data)
         // allow parent to perform extra behaviour
-        this.props.addFolder(data)
+        // console.log(this.props.addFolder)
+        // this.props.addFolder(data)
+        this.context.updateStore()
         this.props.history.push('/')
       })
       .catch(error => {

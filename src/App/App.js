@@ -17,7 +17,7 @@ class App extends Component {
         folders: []
     };
 
-    componentDidMount() {
+    updateStore = () => {
         Promise.all([
             fetch(`${config.API_ENDPOINT}/notes`),
             fetch(`${config.API_ENDPOINT}/folders`)
@@ -36,6 +36,10 @@ class App extends Component {
             .catch(error => {
                 console.error({error});
             });
+    }
+
+    componentDidMount() {
+        this.updateStore()
     }
 
     handleDeleteNote = noteId => {
@@ -83,6 +87,7 @@ class App extends Component {
 
     render() {
         const value = {
+            updateStore: this.updateStore,
             notes: this.state.notes,
             folders: this.state.folders,
             deleteNote: this.handleDeleteNote
